@@ -1,0 +1,9 @@
+PROJECT_NAME           = "lychee-declarative"
+PROJECT_NUMBER         = 0.1
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_DIR@
+INPUT                  = @CMAKE_SOURCE_DIR@/src
+RECURSIVE              = YES
+OUTPUT_LANGUAGE        = Chinese
+IMAGE_PATH             = ../doc/doxygen/images
+DOT_PATH               = /usr/local/bin
+GENERATE TREEVIEW      = ALL

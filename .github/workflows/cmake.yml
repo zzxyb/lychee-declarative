@@ -1,0 +1,47 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  cmake-build:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Debian software sources
+      run: |
+        echo "deb http://deb.debian.org/debian/ bullseye main" | tee /etc/apt/sources.list
+        echo "deb http://deb.debian.org/debian/ bullseye-updates main" | tee -a /etc/apt/sources.list
+        echo "deb http://security.debian.org/ bullseye-security main" | tee -a /etc/apt/sources.list
+        echo "deb http://deb.debian.org/debian unstable main" | tee -a /etc/apt/sources.list
+
+    # Install build requirements for Linux build.
+    - name: Install Build Requirements
+      run: |
+        apt-get update -q
+        apt install -y g++ libegl-dev libepoxy-dev libdrm-dev cmake extra-cmake-modules qt6-declarative-dev qt6-declarative-private-dev qt6-base-dev libpipewire-0.3-dev
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+#    - name: Test
+#      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      #      run: ctest -C ${{env.BUILD_TYPE}} ${{github.workspace}}/build
