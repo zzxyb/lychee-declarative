@@ -1,0 +1,45 @@
+name: Build on archlinux
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Run in container
+        run: |
+          sed -i /etc/pacman.d/mirrorlist -e "1iServer = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch"
+          cat /etc/pacman.d/mirrorlist
+          pacman-key --init
+          pacman --noconfirm --noprogressbar -Syu
+
+      - name: Install dep
+        run: |
+          pacman -Syu --noconfirm cmake pkgconfig git extra-cmake-modules qt6-base qt6-declarative mesa libepoxy libdrm libpipewire
+          pacman -Syu --noconfirm clang ninja
+          pacman -Syu --noconfirm fakeroot sudo
+
+      - name: Set up user
+        run: |
+          useradd -m githubuser
+          echo -e "root ALL=(ALL:ALL) ALL\ngithubuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Configure CMake
+        run: |
+          mkdir -p ${{github.workspace}}/build
+          cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Build
+        # Build your program with the given configuration
+        run: cmake --build ${{github.workspace}}/build
