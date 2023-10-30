@@ -1,0 +1,3 @@
+add_subdirectory(dockexample)
+add_subdirectory(launcherexample)
+add_subdirectory(controlexample)
