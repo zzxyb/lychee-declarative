@@ -4,12 +4,6 @@ provides a lychee-customized way to create user interfaces. It is based on the Q
 ## Release Signatures
 
 ## Installation
-Run these commands to install requirements:
-For Ubuntu(At least 23.04):
-```shell
-    sudo apt update
-    sudo apt install g++ libegl-dev libepoxy-dev libdrm-dev cmake extra-cmake-modules qt6-declarative-dev qt6-declarative-private-dev qt6-base-dev libpipewire-0.3-dev
-```
 Run these commands to make install :
 ```shell
     mkdir build
@@ -26,23 +20,27 @@ Execute "make doc" or "cmake --build <build_dir> --target doc" in the build dire
 
 ### Compiling from Source
 Install dependencies:
+
 build dependencies(for arch linux):
+* cmake
+* pkgconfig
+* git
+* extra-cmake-modules
 * qt6-base
 * qt6-declarative
 * mesa
 * libepoxy
 * libdrm
-* cmake
-* extra-cmake-modules
 * libpipewire
-* doxygen(for doc)
 
-build dependencies(for arch debian):
-* cmake
-* extra-cmake-modules 
+build dependencies(for debian):
+* g++
 * libegl-dev
 * libepoxy-dev
-* libdrm-devqt6-declarative-dev
+* libdrm-dev
+* cmake
+* extra-cmake-modules
+* qt6-declarative-dev
 * qt6-declarative-private-dev
 * qt6-base-dev
 * libpipewire-0.3-dev
